@@ -7,25 +7,10 @@ const fieldSchema = new mongoose.Schema({
     trim: true,
     maxlength: [100, 'Field name cannot exceed 100 characters']
   },
-  description: {
-    type: String,
-    required: [true, 'Field description is required'],
-    maxlength: [500, 'Description cannot exceed 500 characters']
-  },
   location: {
     type: String,
     required: [true, 'Field location is required'],
     trim: true
-  },
-  size: {
-    type: String,
-    required: [true, 'Field size is required'],
-    enum: ['5-a-side', '7-a-side', '11-a-side', 'Training']
-  },
-  surface: {
-    type: String,
-    required: [true, 'Field surface type is required'],
-    enum: ['Grass', 'Artificial Grass', 'Turf', 'Indoor']
   },
   pricePerHour: {
     type: Number,
@@ -39,6 +24,7 @@ const fieldSchema = new mongoose.Schema({
     type: Boolean,
     default: true
   },
+
   openingHours: {
     open: {
       type: String,
@@ -48,11 +34,6 @@ const fieldSchema = new mongoose.Schema({
       type: String,
       default: '22:00'
     }
-  },
-  maxPlayers: {
-    type: Number,
-    required: [true, 'Maximum players capacity is required'],
-    min: [1, 'Maximum players must be at least 1']
   }
 }, {
   timestamps: true

@@ -3,6 +3,10 @@ import cors from 'cors';
 import connectDB from './config/db.js';
 import dotenv from 'dotenv';
 import fieldRoutes from './routes/field.routes.js';
+import authRoutes from './routes/auth.routes.js';
+import userRoutes from './routes/user.routes.js';
+import adminRoutes from './routes/admin.routes.js';
+import bookingRoutes from './routes/booking.routes.js';
 
 dotenv.config();
 
@@ -19,6 +23,10 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/fields', fieldRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/bookings', bookingRoutes);
 
 // Health check route
 app.get('/health', (req, res) => {
@@ -54,6 +62,10 @@ app.listen(PORT, () => {
   console.log(`🚀 Football Booking Backend running on port ${PORT}`);
   console.log(`📊 Health check: http://localhost:${PORT}/health`);
   console.log(`⚽ Fields API: http://localhost:${PORT}/api/fields`);
+  console.log(`🔐 Auth API: http://localhost:${PORT}/api/auth`);
+  console.log(`👤 Users API: http://localhost:${PORT}/api/users`);
+  console.log(`🛠️  Admin API: http://localhost:${PORT}/api/admin`);
+  console.log(`📅 Bookings API: http://localhost:${PORT}/api/bookings`);
 });
 
 export default app;
