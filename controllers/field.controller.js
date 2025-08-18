@@ -1,4 +1,4 @@
-const Field = require('../models/Field');
+import Field from '../models/Field.js';
 
 // @desc    Get all fields
 // @route   GET /api/fields
@@ -306,7 +306,7 @@ const getFieldsBySize = async (req, res) => {
   }
 };
 
-module.exports = {
+export {
   getAllFields,
   getFieldById,
   createField,

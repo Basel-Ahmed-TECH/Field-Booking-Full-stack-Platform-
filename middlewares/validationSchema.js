@@ -1,4 +1,4 @@
-const { body, validationResult } = require('express-validator');
+import { body, validationResult } from 'express-validator';
 
 // Field validation rules
 const fieldValidationRules = [
@@ -132,7 +132,7 @@ const handleValidationErrors = (req, res, next) => {
   next();
 };
 
-module.exports = {
+export {
   fieldValidationRules,
   updateFieldValidationRules,
   handleValidationErrors

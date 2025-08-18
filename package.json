@@ -1,6 +1,7 @@
 {
   "name": "football-booking-backend",
   "version": "1.0.0",
+  "type": "module",
   "description": "Football Field Booking System Backend",
   "main": "index.js",
   "scripts": {

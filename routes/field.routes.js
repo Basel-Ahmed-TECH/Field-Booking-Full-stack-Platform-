@@ -1,6 +1,5 @@
-const express = require('express');
-const router = express.Router();
-const {
+import express from 'express';
+import {
   getAllFields,
   getFieldById,
   createField,
@@ -10,7 +9,9 @@ const {
   toggleMaintenanceMode,
   getFieldsByLocation,
   getFieldsBySize
-} = require('../controllers/field.controller');
+} from '../controllers/field.controller.js';
+
+const router = express.Router();
 
 // Public routes
 router.get('/', getAllFields);
@@ -25,4 +26,4 @@ router.delete('/:id', deleteField);
 router.patch('/:id/toggle-availability', toggleFieldAvailability);
 router.patch('/:id/toggle-maintenance', toggleMaintenanceMode);
 
-module.exports = router;
+export default router;

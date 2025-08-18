@@ -1,7 +1,10 @@
-const express = require('express');
-const cors = require('cors');
-const connectDB = require('./config/db');
-require('dotenv').config();
+import express from 'express';
+import cors from 'cors';
+import connectDB from './config/db.js';
+import dotenv from 'dotenv';
+import fieldRoutes from './routes/field.routes.js';
+
+dotenv.config();
 
 // Initialize express app
 const app = express();
@@ -15,7 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use('/api/fields', require('./routes/field.routes'));
+app.use('/api/fields', fieldRoutes);
 
 // Health check route
 app.get('/health', (req, res) => {
@@ -53,4 +56,4 @@ app.listen(PORT, () => {
   console.log(`⚽ Fields API: http://localhost:${PORT}/api/fields`);
 });
 
-module.exports = app;
+export default app;

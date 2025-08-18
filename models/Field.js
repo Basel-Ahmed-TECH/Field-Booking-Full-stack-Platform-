@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const fieldSchema = new mongoose.Schema({
   name: {
@@ -32,20 +32,12 @@ const fieldSchema = new mongoose.Schema({
     required: [true, 'Price per hour is required'],
     min: [0, 'Price cannot be negative']
   },
-  amenities: [{
-    type: String,
-    enum: ['Lighting', 'Parking', 'Changing Rooms', 'Showers', 'Equipment', 'Refreshments', 'WiFi']
-  }],
   images: [{
     type: String
   }],
   isAvailable: {
     type: Boolean,
     default: true
-  },
-  maintenanceMode: {
-    type: Boolean,
-    default: false
   },
   openingHours: {
     open: {
@@ -80,4 +72,4 @@ fieldSchema.virtual('status').get(function() {
 fieldSchema.set('toJSON', { virtuals: true });
 fieldSchema.set('toObject', { virtuals: true });
 
-module.exports = mongoose.model('Field', fieldSchema);
+export default mongoose.model('Field', fieldSchema);
