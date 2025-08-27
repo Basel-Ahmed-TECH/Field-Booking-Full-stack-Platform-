@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a Pitch - GoalSide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(76, 175, 80, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2E7D32;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #2E7D32;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #1B5E20;
+        }
+
+        .nav-links a.active {
+            background: rgba(255, 255, 255, 0.3);
+            color: #1B5E20;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: bold;
+            color: #1B5E20;
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .booking-container {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            background: #f5f5f5;
+            color: #666;
+            font-weight: 500;
+            margin: 0 1rem;
+        }
+
+        .step.active {
+            background: linear-gradient(135deg, #4CAF50, #66BB6A);
+            color: white;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2E7D32;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f9f9f9;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #4CAF50;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        .pitch-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .pitch-option {
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pitch-option:hover {
+            border-color: #4CAF50;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.2);
+        }
+
+        .pitch-option.selected {
+            border-color: #4CAF50;
+            background: rgba(76, 175, 80, 0.05);
+        }
+
+        .pitch-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2E7D32;
+            margin-bottom: 0.5rem;
+        }
+
+        .pitch-price {
+            font-size: 1.2rem;
+            color: #4CAF50;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .pitch-features {
+            list-style: none;
+            color: #666;
+        }
+
+        .pitch-features li {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .time-slot {
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .time-slot:hover {
+            border-color: #4CAF50;
+            background: rgba(76, 175, 80, 0.05);
+        }
+
+        .time-slot.selected {
+            border-color: #4CAF50;
+            background: linear-gradient(135deg, #4CAF50, #66BB6A);
+            color: white;
+        }
+
+        .time-slot.unavailable {
+            background: #f5f5f5;
+            color: #999;
+            cursor: not-allowed;
+        }
+
+        .booking-summary {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid #e0e0e0;
+            margin-bottom: 2rem;
+        }
+
+        .summary-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2E7D32;
+            margin-bottom: 1rem;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            color: #666;
+        }
+
+        .summary-item.total {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2E7D32;
+            border-top: 1px solid #e0e0e0;
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        .book-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #4CAF50, #66BB6A);
+            color: white;
+            border: none;
+            padding: 1.5rem;
+            border-radius: 15px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .book-btn:hover {
+            background: linear-gradient(135deg, #388E3C, #4CAF50);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+        }
+
+        .book-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .success-message {
+            background: #e8f5e8;
+            color: #2e7d32;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .booking-container {
+                padding: 2rem;
+            }
+
+            .page-title {
+                font-size: 2.5rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .step-indicator {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .step {
+                margin: 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .booking-container {
+                padding: 1.5rem;
+            }
+
+            .time-slots {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">GoalSide</div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/booking.html" class="active">Booking</a></li>
+                <li><a href="/login.html">Login</a></li>
+                <li><a href="/profile.html">Profile</a></li>
+                <li><a href="/signup.html">Sign Up</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <h1 class="page-title">Book Your Pitch</h1>
+        
+        <div class="booking-container">
+            <div class="step-indicator">
+                <div class="step active">
+                    <span>1</span> Select Pitch
+                </div>
+                <div class="step">
+                    <span>2</span> Choose Time
+                </div>
+                <div class="step">
+                    <span>3</span> Confirm
+                </div>
+            </div>
+
+            <div class="error-message" id="errorMessage"></div>
+            <div class="success-message" id="successMessage"></div>
+
+            <form id="bookingForm">
+                <!-- Pitch Selection -->
+                <div class="form-section">
+                    <h2 class="section-title">⚽ Select Your Pitch</h2>
+                    <div class="pitch-selection">
+                        <div class="pitch-option" data-pitch="1" data-price="50">
+                            <div class="pitch-name">Pitch 1 - Premium</div>
+                            <div class="pitch-price">$50/hour</div>
+                            <ul class="pitch-features">
+                                <li>🌟 Premium artificial grass</li>
+                                <li>💡 Floodlight included</li>
+                                <li>🚿 Changing rooms</li>
+                                <li>⏰ 60-minute sessions</li>
+                            </ul>
+                        </div>
+                        <div class="pitch-option" data-pitch="2" data-price="35">
+                            <div class="pitch-name">Pitch 2 - Standard</div>
+                            <div class="pitch-price">$35/hour</div>
+                            <ul class="pitch-features">
+                                <li>🌱 Natural grass surface</li>
+                                <li>💡 Floodlight included</li>
+                                <li>🚿 Basic facilities</li>
+                                <li>⏰ 60-minute sessions</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Date and Time Selection -->
+                <div class="form-section">
+                    <h2 class="section-title">📅 Select Date & Time</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="bookingDate">Date</label>
+                            <input type="date" id="bookingDate" name="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="duration">Duration</label>
+                            <select id="duration" name="duration" required>
+                                <option value="1">1 hour</option>
+                                <option value="2">2 hours</option>
+                                <option value="3">3 hours</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <h3 style="margin: 1.5rem 0 1rem 0; color: #2E7D32;">Available Time Slots</h3>
+                    <div class="time-slots" id="timeSlots">
+                        <!-- Time slots will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Booking Summary -->
+                <div class="booking-summary" id="bookingSummary" style="display: none;">
+                    <div class="summary-title">Booking Summary</div>
+                    <div class="summary-item">
+                        <span>Pitch:</span>
+                        <span id="summaryPitch">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Date:</span>
+                        <span id="summaryDate">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Time:</span>
+                        <span id="summaryTime">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Duration:</span>
+                        <span id="summaryDuration">-</span>
+                    </div>
+                    <div class="summary-item total">
+                        <span>Total Cost:</span>
+                        <span id="summaryTotal">$0</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="book-btn" id="bookBtn" disabled>
+                    Complete Booking
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        let selectedPitch = null;
+        let selectedTime = null;
+        let selectedDate = null;
+        let selectedDuration = 1;
+
+        // Initialize the page
+        window.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                alert('Please login to book a pitch');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('bookingDate').min = today;
+            document.getElementById('bookingDate').value = today;
+
+            // Check URL parameters for pre-selected pitch
+            const urlParams = new URLSearchParams(window.location.search);
+            const pitchParam = urlParams.get('pitch');
+            if (pitchParam) {
+                selectPitch(pitchParam);
+            }
+
+            generateTimeSlots();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Pitch selection
+            document.querySelectorAll('.pitch-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const pitchId = this.dataset.pitch;
+                    selectPitch(pitchId);
+                });
+            });
+
+            // Date and duration change
+            document.getElementById('bookingDate').addEventListener('change', function() {
+                selectedDate = this.value;
+                generateTimeSlots();
+                updateSummary();
+            });
+
+            document.getElementById('duration').addEventListener('change', function() {
+                selectedDuration = parseInt(this.value);
+                generateTimeSlots();
+                updateSummary();
+            });
+
+            // Form submission
+            document.getElementById('bookingForm').addEventListener('submit', handleBookingSubmission);
+        }
+
+        function selectPitch(pitchId) {
+            // Remove previous selection
+            document.querySelectorAll('.pitch-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+
+            // Add selection to clicked pitch
+            const selectedOption = document.querySelector(`[data-pitch="${pitchId}"]`);
+            selectedOption.classList.add('selected');
+            
+            selectedPitch = {
+                id: pitchId,
+                name: selectedOption.querySelector('.pitch-name').textContent,
+                price: parseInt(selectedOption.dataset.price)
+            };
+
+            updateStepIndicator(1);
+            updateSummary();
+        }
+
+        function generateTimeSlots() {
+            const timeSlotsContainer = document.getElementById('timeSlots');
+            timeSlotsContainer.innerHTML = '';
+
+            const slots = [
+                '09:00', '10:00', '11:00', '12:00', '13:00', '14:00',
+                '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00'
+            ];
+
+            slots.forEach(time => {
+                const slot = document.createElement('div');
+                slot.className = 'time-slot';
+                slot.textContent = time;
+                slot.dataset.time = time;
+                
+                // Simulate some unavailable slots
+                if (Math.random() < 0.2) {
+                    slot.classList.add('unavailable');
+                } else {
+                    slot.addEventListener('click', function() {
+                        selectTimeSlot(this);
+                    });
+                }
+                
+                timeSlotsContainer.appendChild(slot);
+            });
+        }
+
+        function selectTimeSlot(slotElement) {
+            if (slotElement.classList.contains('unavailable')) return;
+
+            // Remove previous selection
+            document.querySelectorAll('.time-slot').forEach(slot => {
+                slot.classList.remove('selected');
+            });
+
+            // Add selection
+            slotElement.classList.add('selected');
+            selectedTime = slotElement.dataset.time;
+
+            updateStepIndicator(2);
+            updateSummary();
+        }
+
+        function updateStepIndicator(step) {
+            document.querySelectorAll('.step').forEach((stepEl, index) => {
+                if (index < step) {
+                    stepEl.classList.add('active');
+                } else {
+                    stepEl.classList.remove('active');
+                }
+            });
+        }
+
+        function updateSummary() {
+            const summary = document.getElementById('bookingSummary');
+            const bookBtn = document.getElementById('bookBtn');
+
+            if (selectedPitch && selectedTime && selectedDate) {
+                summary.style.display = 'block';
+                updateStepIndicator(3);
+
+                document.getElementById('summaryPitch').textContent = selectedPitch.name;
+                document.getElementById('summaryDate').textContent = new Date(selectedDate).toLocaleDateString();
+                document.getElementById('summaryTime').textContent = selectedTime;
+                document.getElementById('summaryDuration').textContent = `${selectedDuration} hour(s)`;
+                
+                const totalCost = selectedPitch.price * selectedDuration;
+                document.getElementById('summaryTotal').textContent = `$${totalCost}`;
+
+                bookBtn.disabled = false;
+            } else {
+                summary.style.display = 'none';
+                bookBtn.disabled = true;
+            }
+        }
+
+        async function handleBookingSubmission(e) {
+            e.preventDefault();
+            
+            const errorDiv = document.getElementById('errorMessage');
+            const successDiv = document.getElementById('successMessage');
+            const bookBtn = document.getElementById('bookBtn');
+            
+            // Clear previous messages
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+            
+            if (!selectedPitch || !selectedTime || !selectedDate) {
+                errorDiv.textContent = 'Please complete all booking details';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            // Show loading state
+            bookBtn.disabled = true;
+            bookBtn.innerHTML = '<span class="loading"></span> Processing Booking...';
+            
+            try {
+                const token = localStorage.getItem('authToken');
+                const startDateTime = new Date(`${selectedDate}T${selectedTime}:00`);
+                const endDateTime = new Date(startDateTime.getTime() + (selectedDuration * 60 * 60 * 1000));
+                
+                const bookingData = {
+                    fieldId: selectedPitch.id,
+                    startTime: startDateTime.toISOString(),
+                    endTime: endDateTime.toISOString(),
+                    totalCost: selectedPitch.price * selectedDuration
+                };
+                
+                const response = await fetch('/api/bookings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(bookingData)
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    successDiv.textContent = 'Booking successful! Redirecting to your profile...';
+                    successDiv.style.display = 'block';
+                    
+                    // Redirect to profile after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = '/profile.html';
+                    }, 2000);
+                } else {
+                    errorDiv.textContent = data.message || 'Booking failed. Please try again.';
+                    errorDiv.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Booking error:', error);
+                errorDiv.textContent = 'Network error. Please check your connection and try again.';
+                errorDiv.style.display = 'block';
+            } finally {
+                bookBtn.disabled = false;
+                bookBtn.innerHTML = 'Complete Booking';
+            }
+        }
+    </script>
+</body>
+</html>

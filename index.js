@@ -21,6 +21,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Serve static files from public directory
+app.use(express.static('public'));
+
 // Routes
 app.use('/api/fields', fieldRoutes);
 app.use('/api/auth', authRoutes);
