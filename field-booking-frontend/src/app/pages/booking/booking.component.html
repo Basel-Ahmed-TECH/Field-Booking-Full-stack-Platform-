@@ -1,0 +1,177 @@
+<div class="booking-container" [class.loading]="isSubmitting">
+  <div class="card">
+    <h2>🏟️ Book Your Field</h2>
+
+    <!-- Time Slots Section -->
+    <section class="slots-section" aria-labelledby="slots-heading">
+      <h3 id="slots-heading" class="sr-only">Available Time Slots</h3>
+      <div class="slots-grid" role="grid" aria-label="Available time slots">
+        <button
+          type="button"
+          class="slot"
+          *ngFor="let slot of timeSlots; trackBy: trackBySlotValue"
+          [class.booked]="slot.booked"
+          [class.selected]="isSlotSelected(slot)"
+          [disabled]="slot.booked"
+          [attr.aria-label]="slot.label + (slot.booked ? ' - Already booked' : ' - Available')"
+          [attr.aria-pressed]="isSlotSelected(slot)"
+          (click)="selectSlot(slot)"
+          role="gridcell"
+        >
+          {{ slot.label }}
+        </button>
+      </div>
+    </section>
+
+    <!-- Booking Form -->
+    <form 
+      [formGroup]="bookingForm" 
+      (ngSubmit)="submit()" 
+      class="form"
+      novalidate
+      aria-labelledby="form-heading"
+    >
+      <h3 id="form-heading" class="sr-only">Booking Information</h3>
+      
+      <!-- Name Field -->
+      <div class="form-group">
+        <label class="form-label" for="name">Full Name</label>
+        <input 
+          class="form-control" 
+          id="name" 
+          type="text" 
+          formControlName="name"
+          placeholder="Enter your full name"
+          autocomplete="name"
+          [attr.aria-describedby]="getFieldError('name') ? 'name-error' : null"
+          [attr.aria-invalid]="bookingForm.get('name')?.invalid && bookingForm.get('name')?.touched"
+        />
+        <span 
+          *ngIf="getFieldError('name')" 
+          class="error-message" 
+          id="name-error"
+          role="alert"
+          aria-live="polite"
+        >
+          {{ getFieldError('name') }}
+        </span>
+      </div>
+
+      <!-- Phone Field -->
+      <div class="form-group">
+        <label class="form-label" for="phone">Phone Number</label>
+        <input 
+          class="form-control" 
+          id="phone" 
+          type="tel" 
+          formControlName="phone"
+          placeholder="Enter your phone number"
+          autocomplete="tel"
+          [attr.aria-describedby]="getFieldError('phone') ? 'phone-error' : null"
+          [attr.aria-invalid]="bookingForm.get('phone')?.invalid && bookingForm.get('phone')?.touched"
+        />
+        <span 
+          *ngIf="getFieldError('phone')" 
+          class="error-message" 
+          id="phone-error"
+          role="alert"
+          aria-live="polite"
+        >
+          {{ getFieldError('phone') }}
+        </span>
+      </div>
+
+      <!-- Date Field -->
+      <div class="form-group">
+        <label class="form-label" for="date">Booking Date</label>
+        <input 
+          class="form-control" 
+          id="date" 
+          type="date" 
+          formControlName="date"
+          [min]="getTodayDate()"
+          [attr.aria-describedby]="getFieldError('date') ? 'date-error' : null"
+          [attr.aria-invalid]="bookingForm.get('date')?.invalid && bookingForm.get('date')?.touched"
+        />
+        <span 
+          *ngIf="getFieldError('date')" 
+          class="error-message" 
+          id="date-error"
+          role="alert"
+          aria-live="polite"
+        >
+          {{ getFieldError('date') }}
+        </span>
+      </div>
+
+      <!-- Time Field -->
+      <div class="form-group">
+        <label class="form-label" for="time">Preferred Time</label>
+        <select 
+          class="form-select" 
+          id="time" 
+          formControlName="time"
+          [attr.aria-describedby]="getFieldError('time') ? 'time-error' : null"
+          [attr.aria-invalid]="bookingForm.get('time')?.invalid && bookingForm.get('time')?.touched"
+        >
+          <option value="" disabled>Select your preferred time</option>
+          <option 
+            *ngFor="let slot of timeSlots; trackBy: trackBySlotValue" 
+            [value]="slot.value" 
+            [disabled]="slot.booked"
+          >
+            {{ slot.label }} {{ slot.booked ? '(Booked)' : '' }}
+          </option>
+        </select>
+        <span 
+          *ngIf="getFieldError('time')" 
+          class="error-message" 
+          id="time-error"
+          role="alert"
+          aria-live="polite"
+        >
+          {{ getFieldError('time') }}
+        </span>
+      </div>
+
+      <!-- Submit Button -->
+      <button 
+        class="confirm btn btn-success" 
+        type="submit"
+        [disabled]="bookingForm.invalid || isSubmitting"
+        [attr.aria-describedby]="isSubmitting ? 'loading-message' : null"
+      >
+        <span *ngIf="!isSubmitting">🎯 Confirm Booking</span>
+        <span *ngIf="isSubmitting">
+          <span class="sr-only" id="loading-message">Processing your booking...</span>
+          Processing...
+        </span>
+      </button>
+    </form>
+
+    <!-- Success/Error Messages -->
+    <div 
+      *ngIf="bookingForm.invalid && bookingForm.touched" 
+      class="form-summary-error"
+      role="alert"
+      aria-live="polite"
+    >
+      <p>Please correct the errors above to continue.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Screen Reader Only Styles -->
+<style>
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+</style>
