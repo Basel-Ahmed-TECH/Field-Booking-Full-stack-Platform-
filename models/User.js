@@ -21,6 +21,15 @@ const userSchema = new mongoose.Schema({
       message: 'Enter a valid email format'
     }
   },
+  phone: {
+    type: String,
+    validate: {
+      validator: function(v) {
+        return !v || validator.isMobilePhone(v);
+      },
+      message: 'Enter a valid phone number'
+    }
+  },
   password: {
     type: String,
     required: [true, 'Password is required']

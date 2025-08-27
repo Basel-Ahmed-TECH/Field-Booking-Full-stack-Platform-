@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Football Booking</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .profile-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            margin-right: 20px;
+        }
+
+        .profile-info h2 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .profile-info p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .profile-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .detail-item {
+            padding: 15px;
+            background: #f8f9ff;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .bookings-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .bookings-section h3::before {
+            content: "📅";
+            margin-right: 10px;
+        }
+
+        .bookings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .booking-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #667eea;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .booking-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .booking-header {
+            display: flex;
+            justify-content: between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .field-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .field-location {
+            color: #666;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .field-location::before {
+            content: "📍";
+            margin-right: 5px;
+        }
+
+        .booking-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-upcoming {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .status-completed {
+            background: #e8f5e8;
+            color: #388e3c;
+        }
+
+        .status-cancelled {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+
+        .booking-details {
+            margin-top: 15px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .detail-row label {
+            font-weight: 500;
+            color: #555;
+        }
+
+        .detail-row span {
+            color: #333;
+        }
+
+        .deposit-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .deposit-paid {
+            background: #e8f5e8;
+            color: #388e3c;
+        }
+
+        .deposit-pending {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .error {
+            background: #ffebee;
+            color: #d32f2f;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .empty-state h4 {
+            margin-bottom: 10px;
+            color: #999;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-avatar {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+
+            .bookings-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+    
+    <div class="container">
+        <div class="header">
+            <h1>⚽ User Profile</h1>
+            <p>Welcome to your Football Booking dashboard</p>
+        </div>
+
+        <div id="error-message"></div>
+        
+        <div class="profile-section">
+            <div class="profile-header">
+                <div class="profile-avatar" id="user-avatar">
+                    ?
+                </div>
+                <div class="profile-info">
+                    <h2 id="user-name">Loading...</h2>
+                    <p id="user-email">Loading...</p>
+                </div>
+            </div>
+            
+            <div class="profile-details">
+                <div class="detail-item">
+                    <div class="detail-label">Phone Number</div>
+                    <div class="detail-value" id="user-phone">Loading...</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Member Since</div>
+                    <div class="detail-value" id="member-since">Loading...</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Total Bookings</div>
+                    <div class="detail-value" id="total-bookings">Loading...</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Account Status</div>
+                    <div class="detail-value" id="account-status">Active</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">User Role</div>
+                    <div class="detail-value" id="user-role">Loading...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-section">
+            <div class="bookings-section">
+                <h3>Recent Bookings</h3>
+                <div id="bookings-container">
+                    <div class="loading">Loading your bookings...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API Base URL
+        const API_BASE = 'http://localhost:5000/api';
+        
+        // Auth token management
+        function getAuthToken() {
+            return localStorage.getItem('token') || sessionStorage.getItem('token');
+        }
+
+        function setAuthToken(token) {
+            localStorage.setItem('token', token);
+        }
+
+        function removeAuthToken() {
+            localStorage.removeItem('token');
+            sessionStorage.removeItem('token');
+        }
+
+        // API request helper
+        async function apiRequest(endpoint, options = {}) {
+            const token = getAuthToken();
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token && { 'Authorization': `Bearer ${token}` })
+                },
+                ...options
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}${endpoint}`, config);
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.message || 'Request failed');
+                }
+                
+                return data;
+            } catch (error) {
+                console.error('API Request failed:', error);
+                throw error;
+            }
+        }
+
+        // Show error message
+        function showError(message) {
+            const errorContainer = document.getElementById('error-message');
+            errorContainer.innerHTML = `<div class="error">${message}</div>`;
+        }
+
+        // Hide error message
+        function hideError() {
+            document.getElementById('error-message').innerHTML = '';
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const options = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            return new Date(dateString).toLocaleDateString('en-US', options);
+        }
+
+        // Format date for display
+        function formatDisplayDate(dateString) {
+            const options = { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric'
+            };
+            return new Date(dateString).toLocaleDateString('en-US', options);
+        }
+
+        // Get booking status
+        function getBookingStatus(booking) {
+            const now = new Date();
+            const bookingDate = new Date(booking.from);
+            
+            if (bookingDate < now) {
+                return 'completed';
+            } else {
+                return 'upcoming';
+            }
+        }
+
+        // Get user initials
+        function getUserInitials(firstName, lastName) {
+            return `${firstName?.charAt(0) || ''}${lastName?.charAt(0) || ''}`.toUpperCase() || '?';
+        }
+
+        // Load user profile data
+        async function loadUserProfile() {
+            try {
+                hideError();
+                
+                // Fetch user profile from the API
+                const response = await apiRequest('/users/profile');
+                const userData = response.user;
+
+                // Update UI with user data
+                document.getElementById('user-name').textContent = `${userData.firstName} ${userData.lastName}`;
+                document.getElementById('user-email').textContent = userData.email;
+                document.getElementById('user-phone').textContent = userData.phone || 'Not provided';
+                document.getElementById('user-avatar').textContent = getUserInitials(userData.firstName, userData.lastName);
+                document.getElementById('member-since').textContent = formatDisplayDate(userData.createdAt);
+                document.getElementById('user-role').textContent = userData.role;
+
+            } catch (error) {
+                showError('Failed to load user profile. Please try again.');
+                console.error('Error loading profile:', error);
+            }
+        }
+
+        // Load user bookings
+        async function loadUserBookings() {
+            try {
+                const bookings = await apiRequest('/users/bookings');
+                
+                // Update total bookings
+                document.getElementById('total-bookings').textContent = bookings.length;
+                
+                const container = document.getElementById('bookings-container');
+                
+                if (bookings.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <h4>No bookings yet</h4>
+                            <p>You haven't made any field bookings yet.</p>
+                            <a href="booking.html" class="btn">Make Your First Booking</a>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Sort bookings by date (newest first)
+                bookings.sort((a, b) => new Date(b.from) - new Date(a.from));
+
+                const bookingCards = bookings.map(booking => {
+                    const status = getBookingStatus(booking);
+                    const statusClass = `status-${status}`;
+                    
+                    return `
+                        <div class="booking-card">
+                            <div class="booking-header">
+                                <div>
+                                    <div class="field-name">${booking.field?.name || 'Field Name'}</div>
+                                    <div class="field-location">${booking.field?.location || 'Location'}</div>
+                                </div>
+                                <div class="booking-status ${statusClass}">
+                                    ${status}
+                                </div>
+                            </div>
+                            
+                            <div class="booking-details">
+                                <div class="detail-row">
+                                    <label>Start Date & Time:</label>
+                                    <span>${formatDate(booking.from)}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <label>End Date & Time:</label>
+                                    <span>${formatDate(booking.to)}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <label>Deposit Status:</label>
+                                    <span class="deposit-badge ${booking.depositPaid ? 'deposit-paid' : 'deposit-pending'}">
+                                        ${booking.depositPaid ? '✓ Paid' : '⏳ Pending'}
+                                    </span>
+                                </div>
+                                <div class="detail-row">
+                                    <label>Booking ID:</label>
+                                    <span>${booking._id}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                container.innerHTML = `<div class="bookings-grid">${bookingCards}</div>`;
+
+            } catch (error) {
+                document.getElementById('bookings-container').innerHTML = `
+                    <div class="error">
+                        Failed to load bookings. Please try again later.
+                    </div>
+                `;
+                console.error('Error loading bookings:', error);
+            }
+        }
+
+        // Logout function
+        function logout() {
+            removeAuthToken();
+            window.location.href = 'login.html';
+        }
+
+        // Check authentication on page load
+        function checkAuth() {
+            const token = getAuthToken();
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+        }
+
+        // Initialize page
+        async function init() {
+            checkAuth();
+            await loadUserProfile();
+            await loadUserBookings();
+        }
+
+        // Load page when DOM is ready
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
